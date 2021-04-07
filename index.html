@@ -20,7 +20,7 @@
    position: relative;
    margin: auto;
    height: 90vh;
-   width: 80vw;
+   width: 85vw;
   }
   .baseGraph {
    height: 60vh;
@@ -59,9 +59,14 @@
   </div>
 <script type="text/javascript">
     var labels = []; //Gets filled in with the elapsed time
-	
+	var AFConvertVal = 1;
+	var sensorcnt = 0;
+
 	var options = {
      maintainAspectRatio: false,
+	 spanGaps: true,
+	 showLine: true,
+	 animation: false,
      scales: {
             'left-y-axis': {
                 type: 'linear',
@@ -71,25 +76,46 @@
                 type: 'linear',
                 position: 'right'
             }
+	 },
+	 datasets: {
+		line: {
+			 pointRadius: 2
+		}
 	 }
 	 };
 	 
 	var optionsAFR = {
      maintainAspectRatio: false,
+	 spanGaps: true,
+	 showLine: true,
+	 animation: false,
      scales: {
             'left-y-axis': {
                 type: 'linear',
                 position: 'left'
             }
+	 },
+	 datasets: {
+		line: {
+			 pointRadius: 2
+		}
 	 }
 	 };
 	
-	/* There may be a neater way to do this, but here I keep track of each item, their values, and the header index for the current log */
+	/* 
+		These are sensors that we want to keep separate / manage in a specific way.
+	*/
 	var rpm = {
 	  HeaderIndex : -1,
 	  Values : []
 	};
-    var afr = {
+    var afr1 = {
+	  SensorName : "",
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+    var afr2 = {
+	  SensorName : "",
 	  HeaderIndex : -1,
 	  Values :[]
 	}
@@ -97,82 +123,150 @@
 	  HeaderIndex : -1,
 	  Values :[]
 	}
-    var boosterr = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-    var load = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-	var knock_sum = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-	var Mass_Air = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-	var Target_Boost = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-	var Throttle_Opening_Angle = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-	var Throttle_Plate_Opening_Angle = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-	var Vehicle_Speed = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-	var MAP_Corrected = {
-	  HeaderIndex : -1,
-	  Values :[]
-	}
-
-	function MapToHeader(item, index){
-	  item = item.toLowerCase();
+	/*
+		All the other sensors. This seems like a fucking terrible way to do this, but idk another way.
+	*/
 	
-	  if (item.includes("engine speed (rpm)")){
+	var GenericSensors = {
+		_1: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_2: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_3: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_4: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_5: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_6: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_7: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_8: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_9: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_10: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_11: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_12: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_13: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_14: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_15: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_16: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_17: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_18: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_19: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		},
+		_20: {
+			HeaderIndex : -1,
+			SensorName : "",
+			Values :[]
+		}
+	}
+	function MapToHeader(item, index){
+	  itemLower = item.toLowerCase();
+	  
+	  /*
+		Here we look for specific sensors
+	  */
+	  if (itemLower.includes("engine speed (rpm)")){
 		 rpm.HeaderIndex=index;
-	  }
-	  if (item.includes("a/f sensor")){
-		 afr.HeaderIndex=index;
-	  }
-	  if (item.includes("final fueling base")){
-		 afrTarget.HeaderIndex=index;
-	  }
-	  if (item.includes("boost error")){
-		 boosterr.HeaderIndex=index;
-	  }
-	  if (item.includes("engine load")){
-		 load.HeaderIndex=index;
-	  }
-	  if (item.includes("mass airflow")){
-		 Mass_Air.HeaderIndex=index;
-	  }
-	  if (item.includes("target boost")){
-		 Target_Boost.HeaderIndex=index;
-	  }
-	  if (item.includes("throttle opening")){
-		 Throttle_Opening_Angle.HeaderIndex=index;
-	  }
-	  if (item.includes("throttle plate opening")){
-		 Throttle_Plate_Opening_Angle.HeaderIndex=index;
-	  }
-	  if (item.includes("vehicle speed")){
-		 Vehicle_Speed.HeaderIndex=index;
-	  }
-	  if (item.includes("manifold relative pressure (corrected)")){
-		 MAP_Corrected.HeaderIndex=index;
-	  }
-	  if (item.includes("knock sum")){
-		 knock_sum.HeaderIndex=index;
-	  }
+	  } else if (itemLower.includes("a/f sensor #1")){
+		 afr1.HeaderIndex = index;
+		 afr1.SensorName = item;
+	  } else if (itemLower.includes("a/f sensor #2")){
+		 afr2.HeaderIndex = index;
+		 afr2.SensorName = item;
+	  } else if (itemLower.includes("final fueling base")){
+		 afrTarget.HeaderIndex = index;
+	  } else if (index > 0){
+		//Just say "fuck it" and hope counting works well.
+		sensorcnt++;
+		var sensname = "'" + item + "'";
+		eval("GenericSensors._" + sensorcnt + ".SensorName = " + sensname); //I did the evil thing
+		}
+	  };
+	  
+	function LogSensors(item, index){
+		if (index == afr1.HeaderIndex) {
+            afr1.Values.push(item);
+        } else if (index == afr2.HeaderIndex) {
+            afr2.Values.push(item);
+        } else if (index == afrTarget.HeaderIndex) {
+            afrTarget.Values.push(item * AFConvertVal);
+        } else if (index == rpm.HeaderIndex) {
+            rpm.Values.push(item);
+        } else if (index > 0){
+		  sensorcnt++;
+		  var sensname = "'" + item + "'";
+		  eval("GenericSensors._" + sensorcnt + ".Values.push(" + sensname + ")");//More evil thing. This one may actually be bad
+		}
 	};
 
   $(document).ready(function(){
@@ -208,60 +302,26 @@
 			var cells = row.join(",").split(",");
 			
 			//Time msec - should always be the first cell in a RomRaider log file.
-			labels[i] = labels.push=cells[0];
+			labels.push(cells[0]);
 			
 			
-			//First row will be the "header" and include the sensor name. Let's ready & match these now.
+			//First row will be the "header" and include the sensor names. Let's read & match these now.
 			if (i === 0){
 			cells.forEach(MapToHeader);
-			
+			} else {
+			if (sensorcnt >= cells.length -4) sensorcnt = 0; //More hopeful counting
+			cells.forEach(LogSensors);
 			}
-            if (i > 0 && cells[afr.HeaderIndex]) {
-                afr.Values[i] = afr.Values.push=cells[afr.HeaderIndex];
-            }
-            
-            if (i > 0 && cells[boosterr.HeaderIndex]) {
-                boosterr.Values[i] = boosterr.Values.push=cells[boosterr.HeaderIndex];
-            }
-            if (i > 0 && cells[load.HeaderIndex]) {
-                load.Values[i] = load.Values.push=cells[load.HeaderIndex];
-            }
-            if (i > 0 && cells[rpm.HeaderIndex]) {
-                rpm.Values[i] = rpm.Values.push=cells[rpm.HeaderIndex];
-            }
-            if (i > 0 && cells[knock_sum.HeaderIndex]) {
-                knock_sum.Values[i] = knock_sum.Values.push=cells[knock_sum.HeaderIndex];
-            }
-            if (i > 0 && cells[afrTarget.HeaderIndex]) {
-                afrTarget.Values[i] = afrTarget.Values.push=cells[afrTarget.HeaderIndex];
-            }
-            if (i > 0 && cells[Mass_Air.HeaderIndex]) {
-                Mass_Air.Values[i] = Mass_Air.Values.push=cells[Mass_Air.HeaderIndex];
-            }
-            if (i > 0 && cells[Target_Boost.HeaderIndex]) {
-                Target_Boost.Values[i] = Target_Boost.Values.push=cells[Target_Boost.HeaderIndex];
-            }
-            if (i > 0 && cells[Throttle_Opening_Angle.HeaderIndex]) {
-                Throttle_Opening_Angle.Values[i] = Throttle_Opening_Angle.Values.push=cells[Throttle_Opening_Angle.HeaderIndex];
-            }
-            if (i > 0 && cells[Throttle_Plate_Opening_Angle.HeaderIndex]) {
-                Throttle_Plate_Opening_Angle.Values[i] = Throttle_Plate_Opening_Angle.Values.push=cells[Throttle_Plate_Opening_Angle.HeaderIndex];
-            }
-            if (i > 0 && cells[Vehicle_Speed.HeaderIndex]) {
-                Vehicle_Speed.Values[i] = Vehicle_Speed.Values.push=cells[Vehicle_Speed.HeaderIndex];
-            }
-            if (i > 0 && cells[MAP_Corrected.HeaderIndex]) {
-                MAP_Corrected.Values[i] = MAP_Corrected.Values.push=cells[MAP_Corrected.HeaderIndex];
-            }
+
 		}
 		DrawChart();
 	}
 	
-	function DrawChart(){
+function DrawChart(){
 const data1 = {
   labels: labels,
   datasets: [{
-    label: 'Engine Speed (rpm)',
+    label: 'RPM',
     data: rpm.Values,
     fill: false,
     borderColor: 'rgb(255, 0, 0)',
@@ -270,72 +330,112 @@ const data1 = {
 
   },
   {
-    label: 'Boost Error* (psi)',
-    data: boosterr.Values,
+    label: GenericSensors._1.SensorName,
+    data: GenericSensors._1.Values,
     fill: false,
     borderColor: 'rgb(255, 94, 0)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'Engine Load (Calculated) (g/rev)',
-    data: load.Values,
+    label: GenericSensors._2.SensorName,
+    data: GenericSensors._2.Values,
     fill: false,
     borderColor: 'rgb(0, 77, 255)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'Knock Sum* (count)',
-    data: knock_sum.Values,
+    label: GenericSensors._3.SensorName,
+    data: GenericSensors._3.Values,
     fill: false,
     borderColor: 'rgb(0, 77, 255)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'Mass Airflow',
-    data: Mass_Air.Values,
+    label: GenericSensors._4.SensorName,
+    data: GenericSensors._4.Values,
     fill: false,
     borderColor: 'rgb(0, 140, 255)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'Target Boost',
-    data: Target_Boost.Values,
+    label: GenericSensors._5.SensorName,
+    data: GenericSensors._5.Values,
     fill: false,
     borderColor: 'rgb(0, 210, 255)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'Throttle Opening Angle',
-    data: Throttle_Opening_Angle.Values,
+    label: GenericSensors._6.SensorName,
+    data: GenericSensors._6.Values,
     fill: false,
     borderColor: 'rgb(70, 210, 200)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'Throttle Plate Opening Angle',
-    data: Throttle_Plate_Opening_Angle.Values,
+    label: GenericSensors._7.SensorName,
+    data: GenericSensors._7.Values,
     fill: false,
     borderColor: 'rgb(140, 255, 170)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'Vehicle Speed',
-    data: Vehicle_Speed.Values,
+    label: GenericSensors._8.SensorName,
+    data: GenericSensors._8.Values,
     fill: false,
     borderColor: 'rgb(200, 77, 255)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'MAP Corrected',
-    data: MAP_Corrected.Values,
+    label: GenericSensors._9.SensorName,
+    data: GenericSensors._9.Values,
+    fill: false,
+    borderColor: 'rgb(255, 77, 70)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: GenericSensors._11.SensorName,
+    data: GenericSensors._11.Values,
+    fill: false,
+    borderColor: 'rgb(255, 77, 70)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: GenericSensors._12.SensorName,
+    data: GenericSensors._12.Values,
+    fill: false,
+    borderColor: 'rgb(255, 77, 70)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: GenericSensors._13.SensorName,
+    data: GenericSensors._13.Values,
+    fill: false,
+    borderColor: 'rgb(255, 77, 70)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: GenericSensors._14.SensorName,
+    data: GenericSensors._14.Values,
+    fill: false,
+    borderColor: 'rgb(255, 77, 70)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: GenericSensors._15.SensorName,
+    data: GenericSensors._15.Values,
     fill: false,
     borderColor: 'rgb(255, 77, 70)',
     tension: 0.1,
@@ -346,7 +446,7 @@ const data1 = {
 const dataAFR = {
   labels: labels,
   datasets: [{
-    label: 'Target AFR',
+    label: "Target AFR",
     data: afrTarget.Values,
     fill: false,
     borderColor: 'rgb(255, 51, 51)',
@@ -354,10 +454,18 @@ const dataAFR = {
 	yAxisID: 'left-y-axis'
   },
   {
-    label: 'A/F Sensor #1 (AFR)',
-    data: afr.Values,
+    label: afr1.SensorName,
+    data: afr1.Values,
     fill: false,
     borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: afr2.SensorName,
+    data: afr2.Values,
+    fill: false,
+    borderColor: 'rgb(140, 192, 192)',
     tension: 0.1,
 	yAxisID: 'left-y-axis'
   }]
