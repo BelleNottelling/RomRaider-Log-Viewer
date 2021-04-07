@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RomRaider Log Viewer</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script async src="https://arc.io/widget.min.js#J1xRmnAG"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src=".\inc\papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+  body {
+    margin: 0;
+    padding: 0;
+	
+	}
+  .chart-container {
+   position: relative;
+   margin: auto;
+   height: 90vh;
+   width: 80vw;
+  }
+  .baseGraph {
+   height: 60vh;
+  }
+  
+  .AFRGraph {
+   height: 30vh;
+  }
+  </style>
+</head>
+<body>
+  <div class="container" style="padding:10px 10px;">
+    <h1>RomRaider Log Viewer</h1>
+	<div id="header"></div>
+	<div class="well">
+		<div class="row">
+		<form class="form-inline">
+			<div class="form-group">RomRaider log file:</label>
+			  <input type="file" id="files"  class="form-control" accept=".csv" required />
+			</div>
+			<div class="form-group">
+			 <button type="submit" id="submit-file" class="btn btn-primary">Upload Log</button>
+			 </div>
+		</form>
+		</div>
+	</div>
+	</div>
+
+  <div class="chart-container">
+   <div class="baseGraph">
+    <canvas id="baseGraph"></canvas>
+   </div>
+   <div class="AFRGraph">
+	<canvas id="AFRGraph"></canvas>
+   </div>
+  </div>
+<script type="text/javascript">
+    var labels = []; //Gets filled in with the elapsed time
+	
+	var options = {
+     maintainAspectRatio: false,
+     scales: {
+            'left-y-axis': {
+                type: 'linear',
+                position: 'left'
+            },
+            'right-y-axis': {
+                type: 'linear',
+                position: 'right'
+            }
+	 }
+	 };
+	 
+	var optionsAFR = {
+     maintainAspectRatio: false,
+     scales: {
+            'left-y-axis': {
+                type: 'linear',
+                position: 'left'
+            }
+	 }
+	 };
+	
+	/* There may be a neater way to do this, but here I keep track of each item, their values, and the header index for the current log */
+	var rpm = {
+	  HeaderIndex : -1,
+	  Values : []
+	};
+    var afr = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+	var afrTarget = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+    var boosterr = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+    var load = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+	var knock_sum = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+	var Mass_Air = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+	var Target_Boost = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+	var Throttle_Opening_Angle = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+	var Throttle_Plate_Opening_Angle = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+	var Vehicle_Speed = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+	var MAP_Corrected = {
+	  HeaderIndex : -1,
+	  Values :[]
+	}
+
+	function MapToHeader(item, index){
+	  item = item.toLowerCase();
+	
+	  if (item.includes("engine speed (rpm)")){
+		 rpm.HeaderIndex=index;
+	  }
+	  if (item.includes("a/f sensor")){
+		 afr.HeaderIndex=index;
+	  }
+	  if (item.includes("final fueling base")){
+		 afrTarget.HeaderIndex=index;
+	  }
+	  if (item.includes("boost error")){
+		 boosterr.HeaderIndex=index;
+	  }
+	  if (item.includes("engine load")){
+		 load.HeaderIndex=index;
+	  }
+	  if (item.includes("mass airflow")){
+		 Mass_Air.HeaderIndex=index;
+	  }
+	  if (item.includes("target boost")){
+		 Target_Boost.HeaderIndex=index;
+	  }
+	  if (item.includes("throttle opening")){
+		 Throttle_Opening_Angle.HeaderIndex=index;
+	  }
+	  if (item.includes("throttle plate opening")){
+		 Throttle_Plate_Opening_Angle.HeaderIndex=index;
+	  }
+	  if (item.includes("vehicle speed")){
+		 Vehicle_Speed.HeaderIndex=index;
+	  }
+	  if (item.includes("manifold relative pressure (corrected)")){
+		 MAP_Corrected.HeaderIndex=index;
+	  }
+	  if (item.includes("knock sum")){
+		 knock_sum.HeaderIndex=index;
+	  }
+	};
+
+  $(document).ready(function(){
+	
+    $('#submit-file').on("click",function(e){
+		e.preventDefault();
+		$('#files').parse({
+			config: {
+				delimiter: "auto",
+				complete: ReadData,
+			},
+			before: function(file, inputElem)
+			{
+				//console.log("Parsing file...", file);
+			},
+			error: function(err, file)
+			{
+				//console.log("ERROR:", err, file);
+			},
+			complete: function()
+			{
+				//console.log("Done with all files");
+			}
+		});
+    });
+	
+	function ReadData(results){
+   
+		var data = results.data;
+    	for(i=0;i<data.length;i++){
+			var row = data[i];
+			var header = data[0].join(",").split(",")
+			var cells = row.join(",").split(",");
+			
+			//Time msec - should always be the first cell in a RomRaider log file.
+			labels[i] = labels.push=cells[0];
+			
+			
+			//First row will be the "header" and include the sensor name. Let's ready & match these now.
+			if (i === 0){
+			cells.forEach(MapToHeader);
+			
+			}
+            if (i > 0 && cells[afr.HeaderIndex]) {
+                afr.Values[i] = afr.Values.push=cells[afr.HeaderIndex];
+            }
+            
+            if (i > 0 && cells[boosterr.HeaderIndex]) {
+                boosterr.Values[i] = boosterr.Values.push=cells[boosterr.HeaderIndex];
+            }
+            if (i > 0 && cells[load.HeaderIndex]) {
+                load.Values[i] = load.Values.push=cells[load.HeaderIndex];
+            }
+            if (i > 0 && cells[rpm.HeaderIndex]) {
+                rpm.Values[i] = rpm.Values.push=cells[rpm.HeaderIndex];
+            }
+            if (i > 0 && cells[knock_sum.HeaderIndex]) {
+                knock_sum.Values[i] = knock_sum.Values.push=cells[knock_sum.HeaderIndex];
+            }
+            if (i > 0 && cells[afrTarget.HeaderIndex]) {
+                afrTarget.Values[i] = afrTarget.Values.push=cells[afrTarget.HeaderIndex];
+            }
+            if (i > 0 && cells[Mass_Air.HeaderIndex]) {
+                Mass_Air.Values[i] = Mass_Air.Values.push=cells[Mass_Air.HeaderIndex];
+            }
+            if (i > 0 && cells[Target_Boost.HeaderIndex]) {
+                Target_Boost.Values[i] = Target_Boost.Values.push=cells[Target_Boost.HeaderIndex];
+            }
+            if (i > 0 && cells[Throttle_Opening_Angle.HeaderIndex]) {
+                Throttle_Opening_Angle.Values[i] = Throttle_Opening_Angle.Values.push=cells[Throttle_Opening_Angle.HeaderIndex];
+            }
+            if (i > 0 && cells[Throttle_Plate_Opening_Angle.HeaderIndex]) {
+                Throttle_Plate_Opening_Angle.Values[i] = Throttle_Plate_Opening_Angle.Values.push=cells[Throttle_Plate_Opening_Angle.HeaderIndex];
+            }
+            if (i > 0 && cells[Vehicle_Speed.HeaderIndex]) {
+                Vehicle_Speed.Values[i] = Vehicle_Speed.Values.push=cells[Vehicle_Speed.HeaderIndex];
+            }
+            if (i > 0 && cells[MAP_Corrected.HeaderIndex]) {
+                MAP_Corrected.Values[i] = MAP_Corrected.Values.push=cells[MAP_Corrected.HeaderIndex];
+            }
+		}
+		DrawChart();
+	}
+	
+	function DrawChart(){
+const data1 = {
+  labels: labels,
+  datasets: [{
+    label: 'Engine Speed (rpm)',
+    data: rpm.Values,
+    fill: false,
+    borderColor: 'rgb(255, 0, 0)',
+    tension: 0.1,
+	yAxisID: 'right-y-axis'
+
+  },
+  {
+    label: 'Boost Error* (psi)',
+    data: boosterr.Values,
+    fill: false,
+    borderColor: 'rgb(255, 94, 0)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'Engine Load (Calculated) (g/rev)',
+    data: load.Values,
+    fill: false,
+    borderColor: 'rgb(0, 77, 255)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'Knock Sum* (count)',
+    data: knock_sum.Values,
+    fill: false,
+    borderColor: 'rgb(0, 77, 255)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'Mass Airflow',
+    data: Mass_Air.Values,
+    fill: false,
+    borderColor: 'rgb(0, 140, 255)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'Target Boost',
+    data: Target_Boost.Values,
+    fill: false,
+    borderColor: 'rgb(0, 210, 255)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'Throttle Opening Angle',
+    data: Throttle_Opening_Angle.Values,
+    fill: false,
+    borderColor: 'rgb(70, 210, 200)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'Throttle Plate Opening Angle',
+    data: Throttle_Plate_Opening_Angle.Values,
+    fill: false,
+    borderColor: 'rgb(140, 255, 170)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'Vehicle Speed',
+    data: Vehicle_Speed.Values,
+    fill: false,
+    borderColor: 'rgb(200, 77, 255)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'MAP Corrected',
+    data: MAP_Corrected.Values,
+    fill: false,
+    borderColor: 'rgb(255, 77, 70)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  }
+  ]
+};
+const dataAFR = {
+  labels: labels,
+  datasets: [{
+    label: 'Target AFR',
+    data: afrTarget.Values,
+    fill: false,
+    borderColor: 'rgb(255, 51, 51)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  },
+  {
+    label: 'A/F Sensor #1 (AFR)',
+    data: afr.Values,
+    fill: false,
+    borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1,
+	yAxisID: 'left-y-axis'
+  }]
+};
+		
+        var ctx = document.getElementById('baseGraph');
+        var TheBaseGraph = new Chart(ctx, {
+         options: options,
+		 type: 'line',
+         data: data1
+        });
+		
+		ctx = document.getElementById('AFRGraph');
+		var TheAFRGraph = new Chart(ctx, {
+         options: optionsAFR,
+		 type: 'line',
+         data: dataAFR
+        });
+	}
+  });
+
+</script>
+</body>
+</html>
