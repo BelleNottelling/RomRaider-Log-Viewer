@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <title>RomRaider Log Viewer</title>
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  
+  
+  <!-- External JS Sources -->
   <script async src="https://arc.io/widget.min.js#J1xRmnAG"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Internal JS Sources -->
   <script src=".\inc\papaparse.min.js"></script>
   <script src=".\src\data.js"></script>
   <script src=".\src\values.js"></script>
   <script src=".\src\config.js"></script>
   <script src=".\src\func.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <style>
   body {
     margin: 0;
@@ -166,7 +170,7 @@ const data1 = {
     label: GenericSensors._1.SensorName,
     data: GenericSensors._1.Values,
     fill: false,
-    borderColor: 'rgb(255, 94, 0)',
+    borderColor: '#a6cee3',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -175,7 +179,7 @@ const data1 = {
     label: GenericSensors._2.SensorName,
     data: GenericSensors._2.Values,
     fill: false,
-    borderColor: 'rgb(0, 77, 255)',
+    borderColor: '#1f78b4',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -184,7 +188,7 @@ const data1 = {
     label: GenericSensors._3.SensorName,
     data: GenericSensors._3.Values,
     fill: false,
-    borderColor: 'rgb(0, 77, 255)',
+    borderColor: '#b2df8a',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -193,7 +197,7 @@ const data1 = {
     label: GenericSensors._4.SensorName,
     data: GenericSensors._4.Values,
     fill: false,
-    borderColor: 'rgb(0, 140, 255)',
+    borderColor: '#33a02c',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -202,7 +206,7 @@ const data1 = {
     label: GenericSensors._5.SensorName,
     data: GenericSensors._5.Values,
     fill: false,
-    borderColor: 'rgb(0, 210, 255)',
+    borderColor: '#fb9a99',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -211,7 +215,7 @@ const data1 = {
     label: GenericSensors._6.SensorName,
     data: GenericSensors._6.Values,
     fill: false,
-    borderColor: 'rgb(70, 210, 200)',
+    borderColor: '#e31a1c',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -220,7 +224,7 @@ const data1 = {
     label: GenericSensors._7.SensorName,
     data: GenericSensors._7.Values,
     fill: false,
-    borderColor: 'rgb(140, 255, 170)',
+    borderColor: '#fdbf6f',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -229,7 +233,7 @@ const data1 = {
     label: GenericSensors._8.SensorName,
     data: GenericSensors._8.Values,
     fill: false,
-    borderColor: 'rgb(200, 77, 255)',
+    borderColor: '#ff7f00',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -238,7 +242,7 @@ const data1 = {
     label: GenericSensors._9.SensorName,
     data: GenericSensors._9.Values,
     fill: false,
-    borderColor: 'rgb(255, 77, 70)',
+    borderColor: '#cab2d6',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -247,7 +251,7 @@ const data1 = {
     label: GenericSensors._11.SensorName,
     data: GenericSensors._11.Values,
     fill: false,
-    borderColor: 'rgb(255, 77, 70)',
+    borderColor: '#6a3d9a',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -256,7 +260,7 @@ const data1 = {
     label: GenericSensors._12.SensorName,
     data: GenericSensors._12.Values,
     fill: false,
-    borderColor: 'rgb(255, 77, 70)',
+    borderColor: '#ffff99',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -265,7 +269,7 @@ const data1 = {
     label: GenericSensors._13.SensorName,
     data: GenericSensors._13.Values,
     fill: false,
-    borderColor: 'rgb(255, 77, 70)',
+    borderColor: '#b15928',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -274,7 +278,7 @@ const data1 = {
     label: GenericSensors._14.SensorName,
     data: GenericSensors._14.Values,
     fill: false,
-    borderColor: 'rgb(255, 77, 70)',
+    borderColor: '#a50026',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -283,7 +287,52 @@ const data1 = {
     label: GenericSensors._15.SensorName,
     data: GenericSensors._15.Values,
     fill: false,
-    borderColor: 'rgb(255, 77, 70)',
+    borderColor: '#d73027',
+    tension: 0.1,
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._16.SensorName,
+    data: GenericSensors._16.Values,
+    fill: false,
+    borderColor: '#f46d43',
+    tension: 0.1,
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._17.SensorName,
+    data: GenericSensors._17.Values,
+    fill: false,
+    borderColor: '#fdae61',
+    tension: 0.1,
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._18.SensorName,
+    data: GenericSensors._18.Values,
+    fill: false,
+    borderColor: '#fee08b',
+    tension: 0.1,
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._19.SensorName,
+    data: GenericSensors._19.Values,
+    fill: false,
+    borderColor: '#ffffbf',
+    tension: 0.1,
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._20.SensorName,
+    data: GenericSensors._20.Values,
+    fill: false,
+    borderColor: '#d9ef8b',
     tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
@@ -298,23 +347,20 @@ const dataAFR = {
     fill: false,
     borderColor: 'rgb(255, 51, 51)',
     tension: 0.1,
-	yAxisID: 'left-y-axis'
   },
   {
     label: afr1.SensorName,
     data: afr1.Values,
     fill: false,
-    borderColor: 'rgb(75, 192, 192)',
+    borderColor: '#1a9850',
     tension: 0.1,
-	yAxisID: 'left-y-axis'
   },
   {
     label: afr2.SensorName,
     data: afr2.Values,
     fill: false,
-    borderColor: 'rgb(140, 192, 192)',
+    borderColor: '#a6d96a',
     tension: 0.1,
-	yAxisID: 'left-y-axis'
   }]
 };
 		

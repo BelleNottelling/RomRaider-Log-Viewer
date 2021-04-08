@@ -9,10 +9,10 @@ function MapToHeader(item, index){
   */
   if (itemLower.includes("engine speed (rpm)")){
      rpm.HeaderIndex=index;
-  } else if (itemLower.includes("a/f sensor #1")){
+  } else if (itemLower.includes("a/f sensor #1 (lambda)") || itemLower.includes("a/f sensor #1 (afr)")){
      afr1.HeaderIndex = index;
      afr1.SensorName = item;
-  } else if (itemLower.includes("a/f sensor #2")){
+  } else if (itemLower.includes("a/f sensor #2 (lambda)") || itemLower.includes("a/f sensor #2 (afr)")){
      afr2.HeaderIndex = index;
    afr2.SensorName = item;
   } else if (itemLower.includes("final fueling base")){
@@ -89,4 +89,4 @@ function LogSensors(item, index){
 	    eval("GenericSensors._" + sensorcnt + ".Values.push(" + sensname + ")");//More evil thing. This one may actually be bad
 	  }
 	}
-  };
+};
