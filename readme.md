@@ -16,7 +16,8 @@ RomRaider Log Assist is a simple webpage that's just supposed to make it easier 
  - Lambda <--> AFR  conversion
    - Logic is implemented in the backend, no UI to change settings.
  - Log analysis and tune suggestions
- - Zoom
+ - Zoom / Crosshair
+   - Crosshair is implemented, but both of the zoom plugins I have tried for Chart.js don' work right with so many data points.
  - Performance improvements
  - Dark mode
 
