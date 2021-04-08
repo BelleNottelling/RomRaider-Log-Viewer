@@ -1,6 +1,6 @@
 ﻿# RomRaider Log Assist
 RomRaider Log Assist is a simple webpage that's just supposed to make it easier to analyze your RomRaider logs for ECU tuning. Currently still early in development: code likely has quality issues and some expected features may not be here.
-![A sample graph](https://experiments.bennottelling.com/RR/pics/RRLA-1.PNG)
+![A sample graph](https://experiments.bennottelling.com/RR/pics/demo.gif)
 
 ## Features
 **Implemented:**
