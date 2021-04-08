@@ -13,7 +13,8 @@ RomRaider Log Assist is a simple webpage that's just supposed to make it easier 
 
 **Unimplemented**
 
- - Lamda <--> AFR  conversion
+ - Lambda <--> AFR  conversion
+  - Logic is implemented in the backend, no UI to change settings.
  - Log analysis and tune suggestions
  - Zoom
  - Performance improvements

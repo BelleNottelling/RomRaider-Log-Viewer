@@ -1,5 +1,6 @@
 var labels = []; //Gets filled in with the elapsed time
-	
+var sensorcnt = 0;
+
 /* 
     These are sensors that we want to keep separate / manage in a specific way.
 */

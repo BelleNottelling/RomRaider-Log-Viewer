@@ -9,6 +9,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src=".\inc\papaparse.min.js"></script>
   <script src=".\src\data.js"></script>
+  <script src=".\src\values.js"></script>
+  <script src=".\src\config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
@@ -59,9 +61,6 @@
   </div>
 </div>
 <script type="text/javascript">
-  var AFConvertVal = 1;
-  var sensorcnt = 0;
-
   var options = {
   maintainAspectRatio: false,
   spanGaps: true,
@@ -104,7 +103,6 @@
 	
   function MapToHeader(item, index){
     itemLower = item.toLowerCase();
-	  
     /*
       Here we look for specific sensors
     */
@@ -127,19 +125,64 @@
     };
 	  
   function LogSensors(item, index){
-    if (index == afr1.HeaderIndex) {
-      afr1.Values.push(item);
-    } else if (index == afr2.HeaderIndex) {
-      afr2.Values.push(item);
-    } else if (index == afrTarget.HeaderIndex) {
-      afrTarget.Values.push(item * AFConvertVal);
-    } else if (index == rpm.HeaderIndex) {
-      rpm.Values.push(item);
-    } else if (index > 0){
-      sensorcnt++;
-      var sensname = "'" + item + "'";
-      eval("GenericSensors._" + sensorcnt + ".Values.push(" + sensname + ")");//More evil thing. This one may actually be bad
-    }
+    if (LambdaConvertTo === "AFR") {
+	  switch(index) {
+	    case afr1.HeaderIndex:
+		  if (item <= 1.5) afr1.Values.push(item * LambdaConvertVal);
+		  if (item > 1.5) afr1.Values.push(item);
+		  break;
+	    case afr2.HeaderIndex:
+		  if (item <= 1.5) afr2.Values.push(item * LambdaConvertVal);
+		  if (item > 1.5) afr2.Values.push(item);
+		  break;
+		case afrTarget.HeaderIndex:
+		  if (item <= 1.5) afrTarget.Values.push(item * LambdaConvertVal);
+		  if (item > 1.5) afrTarget.Values.push(item);
+		  break;
+	  }
+	} else if (LambdaConvertTo === "LAMBDA"){
+	  switch(index) {
+	    case afr1.HeaderIndex:
+		  if (item >= 1.5) afr1.Values.push(item / LambdaConvertVal);
+		  if (item < 1.5) afr1.Values.push(item);
+		  break;
+	    case afr2.HeaderIndex:
+		  if (item >= 1.5) afr2.Values.push(item / LambdaConvertVal);
+		  if (item < 1.5) afr2.Values.push(item);
+		  break;
+		case afrTarget.HeaderIndex:
+		  if (item >= 1.5) afrTarget.Values.push(item / LambdaConvertVal);
+		  if (item < 1.5) afrTarget.Values.push(item);
+		  break;
+	  }
+	} else {
+	  switch(index) {
+	    case afr1.HeaderIndex:
+		  afr1.Values.push(item);
+		  break;
+	    case afr2.HeaderIndex:
+		  afr2.Values.push(item);
+		  break;
+		case afrTarget.HeaderIndex:
+		  afrTarget.Values.push(item);
+		  break;
+	  }
+	}
+	switch(index) {
+	  case afr1.HeaderIndex:
+	  case afr2.HeaderIndex:
+	  case afrTarget.HeaderIndex:
+	    break;
+	  case rpm.HeaderIndex:
+	    rpm.Values.push(item);
+		break;
+	  default:
+	    if(index > 0) {
+		  sensorcnt++;
+          var sensname = "'" + item + "'";
+          eval("GenericSensors._" + sensorcnt + ".Values.push(" + sensname + ")");//More evil thing. This one may actually be bad
+		}
+	}
   };
 
   $(document).ready(function(){
