@@ -18,6 +18,7 @@ RomRaider Log Assist is a simple webpage that's just supposed to make it easier 
  - Log analysis and tune suggestions
  - Zoom / Crosshair
    - Crosshair is implemented, but both of the zoom plugins I have tried for Chart.js don't work right with this many data points
+   - Crosshair plugin causes issue where clicking the legend of one graph can effect the others. May disable in the future.
  - Performance improvements
 
 ### Tech Credits

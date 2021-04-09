@@ -131,8 +131,9 @@
 	}
 	},
   legend: {
+    align: 'end',
     labels: {
-	  color: "#a3a3a3"
+	  color: '#a3a3a3'
 	}
   }
   }
@@ -147,6 +148,10 @@
     'left-y-axis': {
       type: 'linear',
       position: 'left'
+    },
+    'right-y-axis': {
+      type: 'linear',
+      position: 'right'
     }
   },
   datasets: {
@@ -165,8 +170,9 @@
 	}
 	},
   legend: {
+    align: 'start',
     labels: {
-	  color: "#a3a3a3"
+	  color: 'a3a3a3'
 	}
   }
   }
@@ -232,7 +238,7 @@
     if (i === 0){
       cells.forEach(MapToHeader);
     } else {
-    if (sensorcnt >= cells.length -4) sensorcnt = 0; //More hopeful counting
+    if (sensorcnt >= cells.length -6) sensorcnt = 0; //More hopeful counting
       cells.forEach(LogSensors);
     }
     }
@@ -432,6 +438,7 @@ const dataAFR = {
     data: afrTarget.Values,
     fill: false,
     borderColor: 'rgb(255, 51, 51)',
+	yAxisID: 'left-y-axis',
     tension: 0.1,
   },
   {
@@ -439,6 +446,7 @@ const dataAFR = {
     data: afr1.Values,
     fill: false,
     borderColor: '#1a9850',
+	yAxisID: 'left-y-axis',
     tension: 0.1,
   },
   {
@@ -446,7 +454,26 @@ const dataAFR = {
     data: afr2.Values,
     fill: false,
     borderColor: '#a6d96a',
+	yAxisID: 'left-y-axis',
     tension: 0.1,
+  },
+  {
+    label: afrCorrection.SensorName,
+    data: afrCorrection.Values,
+    fill: false,
+    borderColor: '#a6d96a',
+    tension: 0.1,
+    yAxisID: 'right-y-axis',
+	hidden: true
+  },
+  {
+    label: afrLearning.SensorName,
+    data: afrLearning.Values,
+    fill: false,
+    borderColor: '#a6d96a',
+    tension: 0.1,
+    yAxisID: 'right-y-axis',
+	hidden: true
   }]
 };
 		

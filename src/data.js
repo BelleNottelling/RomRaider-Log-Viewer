@@ -22,6 +22,16 @@ var afrTarget = {
   HeaderIndex : -1,
   Values :[]
 }
+var afrCorrection = {
+  SensorName : "",
+  HeaderIndex : -1,
+  Values :[]
+}
+var afrLearning = {
+  SensorName : "",
+  HeaderIndex : -1,
+  Values :[]
+}
 
 /*
     All the other sensors. This seems like a fucking terrible way to do this, but idk another way.

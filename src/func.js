@@ -17,6 +17,12 @@ function MapToHeader(item, index){
    afr2.SensorName = item;
   } else if (itemLower.includes("final fueling base")){
      afrTarget.HeaderIndex = index;
+  } else if (itemLower.includes("a/f correction")){
+     afrCorrection.HeaderIndex = index;
+	 afrCorrection.SensorName = item;
+  } else if (itemLower.includes("a/f learning")){
+     afrLearning.HeaderIndex = index;
+	 afrLearning.SensorName = item;
   } else if (index > 0){
      //Just say "fuck it" and hope counting works well.
      sensorcnt++;
@@ -44,7 +50,12 @@ function LogSensors(item, index){
 		case afrTarget.HeaderIndex:
 	    if (item <= 1.5) afrTarget.Values.push(item * LambdaConvertVal);
 	    if (item > 1.5) afrTarget.Values.push(item);
+	    break;		
+		case afrTarget.HeaderIndex:
+	    if (item <= 1.5) afrTarget.Values.push(item * LambdaConvertVal);
+	    if (item > 1.5) afrTarget.Values.push(item);
 	    break;
+		
 	  }
 	} else if (LambdaConvertTo === "LAMBDA"){
 	switch(index) {
@@ -79,6 +90,12 @@ function LogSensors(item, index){
 	  case afr2.HeaderIndex:
 	  case afrTarget.HeaderIndex:
 	    break;
+	  case afrCorrection.HeaderIndex:
+	    afrCorrection.Values.push(item);
+		break;
+	  case afrLearning.HeaderIndex:
+	    afrLearning.Values.push(item);
+		break;
 	  case rpm.HeaderIndex:
 	    rpm.Values.push(item);
 	    break;
