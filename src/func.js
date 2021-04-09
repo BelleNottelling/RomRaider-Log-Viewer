@@ -107,3 +107,42 @@ function LogSensors(item, index){
 	  }
 	}
 };
+
+/*
+  Simply resets both graphs and clears the data so we can populate it with new info
+*/
+function ResetGraphs(){
+TheBaseGraph.destroy();
+TheAFRGraph.destroy();
+
+timelabels = [];
+sensorcnt = 0;
+
+rpm.HeaderIndex = -1;
+rpm.Values = [];
+
+afr1.SensorName = "";
+afr1.HeaderIndex = -1;
+afr1.Values = [];
+
+afr2.SensorName = "";
+afr2.HeaderIndex = -1;
+afr2.Values = [];
+
+afrTarget.HeaderIndex = -1;
+afrTarget.Values = [];
+
+afrCorrection.SensorName = "";
+afrCorrection.HeaderIndex = -1;
+afrCorrection.Values = [];
+
+afrLearning.SensorName = "";
+afrLearning.HeaderIndex = -1;
+afrLearning.Values = [];
+
+Object.keys(GenericSensors).forEach(function(key) {
+  GenericSensors[key].HeaderIndex = -1;
+  GenericSensors[key].SensorName = "";
+  GenericSensors[key].Values = [];
+});
+};

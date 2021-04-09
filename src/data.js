@@ -1,5 +1,7 @@
-var labels = []; //Gets filled in with the elapsed time
+var timelabels = []; //Gets filled in with the elapsed time
 var sensorcnt = 0;
+var TheBaseGraph = null;
+var TheAFRGraph = null;
 
 /* 
     These are sensors that we want to keep separate / manage in a specific way.

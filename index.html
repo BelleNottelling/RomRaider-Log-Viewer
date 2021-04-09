@@ -71,7 +71,7 @@
               </select>
         </div>
         <div class="form-group">
-          <button type="submit" id="submit-file" class="btn btn-primary">Upload Log</button>
+          <button type="submit" id="submit-file" class="btn btn-primary">Update Graphs</button>
         </div>
       </form>
     </div>
@@ -182,6 +182,7 @@
 	
   $('#submit-file').on("click",function(e){
     e.preventDefault();
+    if(TheBaseGraph) ResetGraphs();
 	
 	LambdaConvertTo = document.getElementById('LambdaConvertTo').value;
 	switch(document.getElementById('LambdaConvertVal').value) {
@@ -231,7 +232,7 @@
     var cells = row.join(",").split(",");
 
     //Time msec - should always be the first cell in a RomRaider log file.
-    labels.push(cells[0]);
+    timelabels.push(cells[0]);
 			
 			
     //First row will be the "header" and include the sensor names. Let's read & match these now.
@@ -247,9 +248,7 @@
 	}
 	
 function DrawChart(){
-const data1 = {
-  labels: labels,
-  datasets: [{
+const datasets = [{
     label: 'RPM',
     data: rpm.Values,
     fill: false,
@@ -429,11 +428,9 @@ const data1 = {
 	yAxisID: 'left-y-axis',
 	hidden: true
   }
-  ]
-};
-const dataAFR = {
-  labels: labels,
-  datasets: [{
+  ];
+  
+const datasetsAFR = [{
     label: "Target AFR",
     data: afrTarget.Values,
     fill: false,
@@ -474,21 +471,26 @@ const dataAFR = {
     tension: 0.1,
     yAxisID: 'right-y-axis',
 	hidden: true
-  }]
-};
+  }];
 		
   var ctx = document.getElementById('baseGraph');
-  var TheBaseGraph = new Chart(ctx, {
+  TheBaseGraph = new Chart(ctx, {
     options: options,
     type: 'line',
-    data: data1
+    data: {
+	  labels: timelabels,
+	  datasets: datasets.filter(ds => ds.label !== '')
+	}
   });
 		
   ctx = document.getElementById('AFRGraph');
-  var TheAFRGraph = new Chart(ctx, {
+  TheAFRGraph = new Chart(ctx, {
     options: optionsAFR,
     type: 'line',
-    data: dataAFR
+    data: {
+	  labels: timelabels,
+	  datasets: datasetsAFR.filter(ds => ds.label !== '')
+	}
   });
   }
   });
