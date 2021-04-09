@@ -10,16 +10,15 @@ RomRaider Log Assist is a simple webpage that's just supposed to make it easier 
  - Separate graph for AFR recordings
  - Right hand y-axis for RPM
  - Show/hide log data
+ - Lambda <--> AFR  conversion
+   -  Gas, E85, E100, Methanol, or Diesel
 
 **Unimplemented**
 
- - Lambda <--> AFR  conversion
-   - Logic is implemented in the backend, no UI to change settings.
  - Log analysis and tune suggestions
  - Zoom / Crosshair
-   - Crosshair is implemented, but both of the zoom plugins I have tried for Chart.js don' work right with so many data points.
+   - Crosshair is implemented, but both of the zoom plugins I have tried for Chart.js don't work right with this many data points
  - Performance improvements
- - Dark mode
 
 ### Tech Credits
 
