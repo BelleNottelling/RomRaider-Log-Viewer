@@ -1,4 +1,6 @@
-﻿# RomRaider Log Assist
+﻿[![DeepScan grade](https://deepscan.io/api/teams/1405/projects/16641/branches/361084/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=1405&pid=16641&bid=361084)
+
+# RomRaider Log Assist
 RomRaider Log Assist is a simple webpage that's just supposed to make it easier to analyze your RomRaider logs for ECU tuning. Currently still early in development: code likely has quality issues and some expected features may not be here.
 ![A sample graph](https://experiments.bennottelling.com/RR/pics/demo.gif)
 
