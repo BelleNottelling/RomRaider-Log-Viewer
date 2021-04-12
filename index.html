@@ -6,7 +6,7 @@
   
   
   <!-- External JS Sources -->
-  <script async src="https://arc.io/widget.min.js#J1xRmnAG"></script>
+  <!--<script async src="https://arc.io/widget.min.js#J1xRmnAG"></script>-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
@@ -131,7 +131,6 @@
 	}
 	},
   legend: {
-    align: 'end',
     labels: {
 	  color: '#a3a3a3'
 	}
@@ -170,7 +169,6 @@
 	}
 	},
   legend: {
-    align: 'start',
     labels: {
 	  color: '#a3a3a3'
 	}
@@ -239,10 +237,10 @@
     if (i === 0){
       cells.forEach(MapToHeader);
     } else {
-    if (sensorcnt > cells.length -6) sensorcnt = 0; //More hopeful counting
+	  sensorcnt = 0;
       cells.forEach(LogSensors);
     }
-    }
+	}
 	
     DrawChart();
 	}
@@ -329,6 +327,14 @@ const datasets = [{
 	hidden: true
   },
   {
+    label: GenericSensors._10.SensorName,
+    data: GenericSensors._10.Values,
+    fill: false,
+    borderColor: '#cab2d6',
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
     label: GenericSensors._11.SensorName,
     data: GenericSensors._11.Values,
     fill: false,
@@ -403,6 +409,46 @@ const datasets = [{
   {
     label: GenericSensors._20.SensorName,
     data: GenericSensors._20.Values,
+    fill: false,
+    borderColor: '#d9ef8b',
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._21.SensorName,
+    data: GenericSensors._21.Values,
+    fill: false,
+    borderColor: '#d9ef8b',
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._22.SensorName,
+    data: GenericSensors._22.Values,
+    fill: false,
+    borderColor: '#d9ef8b',
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._23.SensorName,
+    data: GenericSensors._23.Values,
+    fill: false,
+    borderColor: '#d9ef8b',
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._24.SensorName,
+    data: GenericSensors._24.Values,
+    fill: false,
+    borderColor: '#d9ef8b',
+	yAxisID: 'left-y-axis',
+	hidden: true
+  },
+  {
+    label: GenericSensors._25.SensorName,
+    data: GenericSensors._25.Values,
     fill: false,
     borderColor: '#d9ef8b',
 	yAxisID: 'left-y-axis',
