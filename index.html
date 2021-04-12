@@ -239,7 +239,7 @@
     if (i === 0){
       cells.forEach(MapToHeader);
     } else {
-    if (sensorcnt >= cells.length -6) sensorcnt = 0; //More hopeful counting
+    if (sensorcnt > cells.length -6) sensorcnt = 0; //More hopeful counting
       cells.forEach(LogSensors);
     }
     }
@@ -253,7 +253,6 @@ const datasets = [{
     data: rpm.Values,
     fill: false,
     borderColor: 'rgb(255, 0, 0)',
-    tension: 0.1,
     yAxisID: 'right-y-axis'
 
   },
@@ -262,7 +261,6 @@ const datasets = [{
     data: GenericSensors._1.Values,
     fill: false,
     borderColor: '#a6cee3',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -271,7 +269,6 @@ const datasets = [{
     data: GenericSensors._2.Values,
     fill: false,
     borderColor: '#1f78b4',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -280,7 +277,6 @@ const datasets = [{
     data: GenericSensors._3.Values,
     fill: false,
     borderColor: '#b2df8a',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -289,7 +285,6 @@ const datasets = [{
     data: GenericSensors._4.Values,
     fill: false,
     borderColor: '#33a02c',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -298,7 +293,6 @@ const datasets = [{
     data: GenericSensors._5.Values,
     fill: false,
     borderColor: '#fb9a99',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -307,7 +301,6 @@ const datasets = [{
     data: GenericSensors._6.Values,
     fill: false,
     borderColor: '#e31a1c',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -316,7 +309,6 @@ const datasets = [{
     data: GenericSensors._7.Values,
     fill: false,
     borderColor: '#fdbf6f',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -325,7 +317,6 @@ const datasets = [{
     data: GenericSensors._8.Values,
     fill: false,
     borderColor: '#ff7f00',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -334,7 +325,6 @@ const datasets = [{
     data: GenericSensors._9.Values,
     fill: false,
     borderColor: '#cab2d6',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -343,7 +333,6 @@ const datasets = [{
     data: GenericSensors._11.Values,
     fill: false,
     borderColor: '#6a3d9a',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -352,7 +341,6 @@ const datasets = [{
     data: GenericSensors._12.Values,
     fill: false,
     borderColor: '#ffff99',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -361,7 +349,6 @@ const datasets = [{
     data: GenericSensors._13.Values,
     fill: false,
     borderColor: '#b15928',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -370,7 +357,6 @@ const datasets = [{
     data: GenericSensors._14.Values,
     fill: false,
     borderColor: '#a50026',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -379,7 +365,6 @@ const datasets = [{
     data: GenericSensors._15.Values,
     fill: false,
     borderColor: '#d73027',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -388,7 +373,6 @@ const datasets = [{
     data: GenericSensors._16.Values,
     fill: false,
     borderColor: '#f46d43',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -397,7 +381,6 @@ const datasets = [{
     data: GenericSensors._17.Values,
     fill: false,
     borderColor: '#fdae61',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -406,7 +389,6 @@ const datasets = [{
     data: GenericSensors._18.Values,
     fill: false,
     borderColor: '#fee08b',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -415,7 +397,6 @@ const datasets = [{
     data: GenericSensors._19.Values,
     fill: false,
     borderColor: '#ffffbf',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   },
@@ -424,7 +405,6 @@ const datasets = [{
     data: GenericSensors._20.Values,
     fill: false,
     borderColor: '#d9ef8b',
-    tension: 0.1,
 	yAxisID: 'left-y-axis',
 	hidden: true
   }
@@ -436,7 +416,6 @@ const datasetsAFR = [{
     fill: false,
     borderColor: 'rgb(255, 51, 51)',
 	yAxisID: 'left-y-axis',
-    tension: 0.1,
   },
   {
     label: afr1.SensorName,
@@ -444,7 +423,6 @@ const datasetsAFR = [{
     fill: false,
     borderColor: '#1a9850',
 	yAxisID: 'left-y-axis',
-    tension: 0.1,
   },
   {
     label: afr2.SensorName,
@@ -452,14 +430,12 @@ const datasetsAFR = [{
     fill: false,
     borderColor: '#a6d96a',
 	yAxisID: 'left-y-axis',
-    tension: 0.1,
   },
   {
     label: afrCorrection.SensorName,
     data: afrCorrection.Values,
     fill: false,
     borderColor: '#a6d96a',
-    tension: 0.1,
     yAxisID: 'right-y-axis',
 	hidden: true
   },
@@ -468,7 +444,6 @@ const datasetsAFR = [{
     data: afrLearning.Values,
     fill: false,
     borderColor: '#a6d96a',
-    tension: 0.1,
     yAxisID: 'right-y-axis',
 	hidden: true
   }];
