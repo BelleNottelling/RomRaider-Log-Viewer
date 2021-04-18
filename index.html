@@ -7,8 +7,8 @@
   
   <!-- External JS Sources -->
   <!--<script async src="https://arc.io/widget.min.js#J1xRmnAG"></script>-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.1.1/dist/chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
 
   <!-- Internal JS Sources -->
@@ -105,6 +105,9 @@
   spanGaps: true,
   showLine: true,
   animation: false,
+  interaction: {
+    intersect: false
+  },
   scales: {
     'left-y-axis': {
       type: 'linear',
@@ -143,6 +146,9 @@
   spanGaps: true,
   showLine: true,
   animation: false,
+  interaction: {
+    intersect: false
+  },
   scales: {
     'left-y-axis': {
       type: 'linear',
