@@ -13,7 +13,7 @@
 
   <!-- Internal JS Sources -->
   <script src=".\inc\papaparse.min.js"></script>
-  <script src=".\inc\chartjs-plugin-crosshair.min.js"></script> <!-- https://github.com/AbelHeinsbroek/chartjs-plugin-crosshair/pull/65 -->
+  <script src=".\inc\chartjs-plugin-crosshair.min.js"></script>
   
   <script src=".\src\func.js"></script>
   <script src=".\src\data.js"></script>
@@ -70,8 +70,30 @@
 				<option value="Diesel">Diesel</option>
               </select>
         </div>
+        <br>
+        <label> Log Splitting Options: </label>
+		<br>
+            <label for="SliceCount">Number of Slices:</label>
+              <select name="SliceCount" id="SliceCount">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+		    <label for="ViewSlice">Current Slice to view:</label>
+              <select name="ViewSlice" id="ViewSlice">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+        </div>
         <div class="form-group">
-          <button type="submit" id="submit-file" class="btn btn-primary">Update Graphs</button>
+          <button type="submit" id="submit-file" class="btn btn-primary">Generate Graphs</button>
         </div>
       </form>
     </div>
@@ -187,7 +209,10 @@
   $('#submit-file').on("click",function(e){
     e.preventDefault();
     if(TheBaseGraph) ResetGraphs();
-	
+
+	SliceCount = document.getElementById('SliceCount').value;
+	ViewSlice = document.getElementById('ViewSlice').value;
+
 	LambdaConvertTo = document.getElementById('LambdaConvertTo').value;
 	switch(document.getElementById('LambdaConvertVal').value) {
 	  case "Gas":
@@ -228,23 +253,31 @@
   });
 	
   function ReadData(results){
-   
     var data = results.data;
+    
     for(i=0;i<data.length;i++){
     var row = data[i];
     var header = data[0].join(",").split(",")
     var cells = row.join(",").split(",");
 
+    //Logic to split the log file into separate datasets.
+    if(SliceCount <= 1){
+    var StartingColumn = 0;
+    var EndingColumn = data.length;
+    } else {
+    var SliceSize = data.length/SliceCount;
+    var StartingColumn = SliceSize * (ViewSlice -1);
+    var EndingColumn = StartingColumn + SliceSize;
+    }
+
     //Time msec - should always be the first cell in a RomRaider log file.
-    timelabels.push(cells[0]);
-			
-			
     //First row will be the "header" and include the sensor names. Let's read & match these now.
     if (i === 0){
       cells.forEach(MapToHeader);
-    } else {
+    } else if (i >= StartingColumn && i <= EndingColumn){
 	  sensorcnt = 0;
       cells.forEach(LogSensors);
+      timelabels.push(cells[0]);
     }
 	}
 	
