@@ -6,10 +6,8 @@
 let LambdaConvertTo = "AFR",
     LambdaConvertVal = LambdaAFR.Gas;
 /*
-------Log Splitting Settings------
-  These exist to help with graph performance by limiting the number of data points on screen at once. (logs can easily have 100s of thousands at once depending on the size)
-  SliceCount is the number of "slices" to create out of the log.
-  ViewSlice is what slice you want to currently view.
+------Zoom Settings------
+  "Zoom" into a specific time range (the specific number is in min)
 */
-let SliceCount = 1,
-    ViewSlice = 1;
+let StartMin = 0,
+    EndMin = 0;

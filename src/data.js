@@ -1,9 +1,9 @@
 "use strict";
 
 let sensorcnt = 0,
-  TheAFRGraph,
-  TheBaseGraph,
-  timelabels = [];
+    TheAFRGraph,
+    TheBaseGraph,
+    timelabels = [];
 
 /*
     These are sensors that we want to keep separate / manage in a specific way.

@@ -71,26 +71,12 @@
               </select>
         </div>
         <br>
-        <label> Log Splitting Options: </label>
+        <label> Time-Based Zoom Options: </label>
 		<br>
-            <label for="SliceCount">Number of Slices:</label>
-              <select name="SliceCount" id="SliceCount">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-              </select>
-		    <label for="ViewSlice">Current Slice to view:</label>
-              <select name="ViewSlice" id="ViewSlice">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-              </select>
+            <label for="StartMin">Start Minute:</label>
+               <input type="number" name="StartMin" id="StartMin"/>
+		    <label for="EndMin">Ending Minute:</label>
+               <input type="number" name="EndMin" id="EndMin"/>
         </div>
         <div class="form-group">
           <button type="submit" id="submit-file" class="btn btn-primary">Generate Graphs</button>
@@ -210,8 +196,8 @@
     e.preventDefault();
     if(TheBaseGraph) ResetGraphs();
 
-	SliceCount = document.getElementById('SliceCount').value;
-	ViewSlice = document.getElementById('ViewSlice').value;
+	StartMin = document.getElementById('StartMin').value;
+	EndMin = document.getElementById('EndMin').value;
 
 	LambdaConvertTo = document.getElementById('LambdaConvertTo').value;
 	switch(document.getElementById('LambdaConvertVal').value) {
@@ -255,35 +241,30 @@
   function ReadData(results){
     var data = results.data;
     
-    for(i=0;i<data.length;i++){
+    for(i=0;i<(data.length-1);i++){
     var row = data[i];
-    var header = data[0].join(",").split(",")
+    var header = data[0].join(",").split(",");
     var cells = row.join(",").split(",");
 
-    //Logic to split the log file into separate datasets.
-    if(SliceCount <= 1){
-    var StartingColumn = 0;
-    var EndingColumn = data.length;
-    } else {
-    var SliceSize = data.length/SliceCount;
-    var StartingColumn = SliceSize * (ViewSlice -1);
-    var EndingColumn = StartingColumn + SliceSize;
-    }
-
-    //Time msec - should always be the first cell in a RomRaider log file.
     //First row will be the "header" and include the sensor names. Let's read & match these now.
     if (i === 0){
       cells.forEach(MapToHeader);
-    } else if (i >= StartingColumn && i <= EndingColumn){
+    } else if (EndMin <= 0){
 	  sensorcnt = 0;
+      if(i+2 >= data.length){
+        document.getElementById('EndMin').value = cells[0]/60000;
+      }
       cells.forEach(LogSensors);
       timelabels.push(cells[0]);
-    }
+    } else if (cells[0] >= StartMin*60000 && cells[0] <= EndMin*60000){
+      sensorcnt = 0;
+      cells.forEach(LogSensors);
+      timelabels.push(cells[0]);
 	}
-	
+    }
     DrawChart();
 	}
-	
+
 function DrawChart(){
 const datasets = [{
     label: 'RPM',
