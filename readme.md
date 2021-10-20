@@ -19,8 +19,9 @@ RomRaider Log Assist is a simple webpage that's just supposed to make it easier 
 
  - Log analysis and tune suggestions
  - Zoom
+   - Rudimentary zooming based on minute range has been implemented
  - Performance improvements
-   - You can now split a log into multiple chunks for better graph performance.
+   - You can zoom into a specific time span to improve performance.
 
 ### Tech Credits
 
