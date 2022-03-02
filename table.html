@@ -30,6 +30,10 @@ tablearray[0] = header.join("	");
 
 var DataSet = null;
 
+/*
+ Build an array of all data points. Ignore first column & row.
+ Used for the min/max and color generation.
+*/
 for (var i = 1; i < tablearray.length; i++) {
   var data = tablearray[i].split("	")
   data.shift();
@@ -39,54 +43,6 @@ for (var i = 1; i < tablearray.length; i++) {
     DataSet = DataSet.concat(data);
   }
 }
-
-function perc2color(perc,min,max) {
-            var base = (max - min);
-
-            if (base == 0) { perc = 100; }
-            else {
-                perc = (perc - min) / base * 100; 
-            }
-            var r, g, b = 0;
-            if (perc < 50) {
-                r = 255;
-                g = Math.round(5.1 * perc);
-            }
-            else {
-                g = 255;
-                r = Math.round(510 - 5.10 * perc);
-            }
-            var h = r * 0x10000 + g * 0x100 + b * 0x1;
-            return '#' + ('000000' + h.toString(16)).slice(-6);
-
-}
-
-var tableCreate = function() {
-  const body = document.body,
-  tbl = document.createElement('table');
-  tbl.style.width = '100px';
-  tbl.style.border = '1px solid black';
-
-  for (let i = 0; i < tablearray.length; i++) {
-    const tr = tbl.insertRow();
-    for (let j = 0; j < header.length; j++) {
-        const td = tr.insertCell();
-        var data = tablearray[i].split("	")
-        td.appendChild(document.createTextNode(data[j]));
-        td.style.border = '1px solid black';
-        
-        
-        if(i > 0 && j > 0){
-        var Min = Math.min(...DataSet);
-        var Max = Math.max(...DataSet);
-        var color = perc2color(data[j], Min, Max);
-        td.style.backgroundColor = color;
-        }
-    }
-  }
-  body.appendChild(tbl);
-}
-
 
 tableCreate();
 </script>

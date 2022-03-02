@@ -18,6 +18,7 @@
   <script src=".\src\data.js"></script>
   <script src=".\src\values.js"></script>
   <script src=".\src\config.js"></script>
+  <script src=".\src\tables.js"></script>
   
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <style>
@@ -52,6 +53,13 @@
         
 		<input type="file" id="files"  class="form-control" accept=".csv" required />
         <br>
+		<label> Display (Table) Options: </label>
+              <select name="Display" id="Display">
+                <option value="Both">Both</option>
+                <option value="Table">Table</option>
+                <option value="Graph">Graph</option>
+              </select>
+        <br>
 		<label> Lambda <--> AFR Options: </label>
 		<br>
             <label for="LambdaConvertTo">Convert To:</label>
@@ -85,7 +93,10 @@
   </div>
 </div>
 
-<div class="chart-container">
+<!-- Ultra basic page design -->
+<p id="TableType"> </p>
+
+<div id="Graph" class="chart-container">
   <div class="baseGraph">
     <canvas id="baseGraph"></canvas>
   </div>
@@ -261,7 +272,24 @@
       timelabels.push(cells[0]);
 	}
     }
-    DrawChart();
+    
+    var DisplaySettings = document.getElementById('Display').value;
+    
+    switch (DisplaySettings){
+        case "Both":
+            DrawChart();
+            break;
+        case "Graph":
+            DrawChart();
+            break;
+        case "Table":
+            DrawTable();
+            break;
+        default:
+            DrawChart();
+            break;
+    }
+    
 	}
 
 function DrawChart(){
