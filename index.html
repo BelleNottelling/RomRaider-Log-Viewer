@@ -86,7 +86,8 @@
                <input type="number" name="EndMin" id="EndMin"/>
         </div>
         <div class="form-group">
-          <button type="submit" id="submit-file" class="btn btn-primary">Generate Graphs</button>
+          <button type="submit" id="submit-file" class="btn btn-primary">Process / Calculate Data</button>
+          <button type="submit" id="generate-graphs" class="btn btn-primary">Generate Graphs</button>
         </div>
       </form>
     </div>
@@ -247,7 +248,29 @@
     }
     });
   });
-	
+  
+  $('#generate-graphs').on("click",function(e){
+    e.preventDefault();
+    if(TheBaseGraph) ResetGraphs();
+
+    var DisplaySettings = document.getElementById('Display').value;
+    
+    switch (DisplaySettings){
+        case "Both":
+            DrawChart();
+            break;
+        case "Graph":
+            DrawChart();
+            break;
+        case "Table":
+            DrawTable();
+            break;
+        default:
+            DrawChart();
+            break;
+    }
+    });
+
   function ReadData(results){
     var data = results.data;
     
@@ -271,23 +294,6 @@
       cells.forEach(LogSensors);
       timelabels.push(cells[0]);
 	}
-    }
-    
-    var DisplaySettings = document.getElementById('Display').value;
-    
-    switch (DisplaySettings){
-        case "Both":
-            DrawChart();
-            break;
-        case "Graph":
-            DrawChart();
-            break;
-        case "Table":
-            DrawTable();
-            break;
-        default:
-            DrawChart();
-            break;
     }
     
 	}
